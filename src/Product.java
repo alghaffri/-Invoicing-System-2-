@@ -15,4 +15,9 @@ public class Product {
 	public double getPrice() {
 		return price;
 	}
+
+	public double getQtyAmount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

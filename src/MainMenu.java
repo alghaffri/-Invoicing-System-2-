@@ -3,41 +3,54 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+
 public class MainMenu {
-	private static final String CREATE_PRODUCT_TABLE_SQL = "CREATE TABLE IF NOT EXISTS products ("
-			+ "id INTEGER PRIMARY KEY AUTOINCREMENT," + "name TEXT NOT NULL," + "price REAL NOT NULL" + ")";
+	 
+	 private static final String CREATE_PRODUCT_TABLE_SQL = "CREATE TABLE products ("
+	            + "id INTEGER PRIMARY KEY ,"
+	            + "name TEXT NOT NULL,"
+	            + "price REAL NOT NULL"
+	            + ")";
+	    
+	    
+	    private static final String CREATE_INVOICE_TABLE_SQL = "CREATE TABLE invoices ("
+	            + "id INTEGER PRIMARY KEY ,"
+	            + "customer_name TEXT NOT NULL,"
+	            + "total REAL NOT NULL,"
+	            + "balance REAL NOT NULL"
+	            + ")";
+	    private static final String CREATE_INVOICE_ITEM_TABLE_SQL = "CREATE TABLE items ("
+	            + "invoice_id INTEGER NOT NULL,"
+	            + "product_id INTEGER NOT NULL,"
+	            + "quantity INTEGER NOT NULL,"
+	            + "FOREIGN KEY (invoice_id) REFERENCES invoices (id),"
+	            + "FOREIGN KEY (product_id) REFERENCES products (id)"
+	            + ")";
 
-	private static final String CREATE_INVOICE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS invoices ("
-			+ "id INTEGER PRIMARY KEY AUTOINCREMENT," + "customer_name TEXT NOT NULL," + "total REAL NOT NULL,"
-			+ "balance REAL NOT NULL" + ")";
+	    public static void initializeDatabase(String url, String username, String password) {
+	        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+	            java.sql.Statement stmt = conn.createStatement();
+	            stmt.execute(CREATE_PRODUCT_TABLE_SQL);
+	            stmt.execute(CREATE_INVOICE_TABLE_SQL);
+	            stmt.execute(CREATE_INVOICE_ITEM_TABLE_SQL);
+	        } catch (SQLException e) {
+	            System.out.println("Error initializing database: " + e.getMessage());
+	        }
+	    }
 
-	private static final String CREATE_INVOICE_ITEM_TABLE_SQL = "CREATE TABLE IF NOT EXISTS invoice_items ("
-			+ "invoice_id INTEGER NOT NULL," + "product_id INTEGER NOT NULL," + "quantity INTEGER NOT NULL,"
-			+ "FOREIGN KEY (invoice_id) REFERENCES invoices (id)," + "FOREIGN KEY (product_id) REFERENCES products (id)"
-			+ ")";
+	    public static void main(String[] args) {
+	    	  String url = "jdbc:sqlserver://localhost:1433;" +
+	                  "databaseName=InvoicingSystem;" +
+	                  "encrypt=true;" +
+	                  "trustServerCertificate=true";
+	          String user = "sa";
+	          String pass = "root";
+	        initializeDatabase(url, user, pass);
 
-	public static void initializeDatabase(String url, String username, String password) {
-		try (Connection conn = DriverManager.getConnection(url, username, password)) {
-			java.sql.Statement stmt = conn.createStatement();
-			stmt.execute(CREATE_PRODUCT_TABLE_SQL);
-			stmt.execute(CREATE_INVOICE_TABLE_SQL);
-			stmt.execute(CREATE_INVOICE_ITEM_TABLE_SQL);
-
-		} catch (SQLException e) {
-			System.out.println("Error initializing database: " + e.getMessage());
-		}
-	}
-
-	public static void main(String[] args) {
-		String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=InvoicingSystem;" + "encrypt=true;"
-				+ "trustServerCertificate=true";
-		String user = "sa";
-		String pass = "root";
-		initializeDatabase(url, user, pass);
 		Scanner input = new Scanner(System.in);
 		Menu menu = new Menu();
 		boolean exit = false;
-
+		int userInput;
 		while (!exit) {
 			menu.showMenu();
 			System.out.print("Select an option: ");
@@ -46,8 +59,51 @@ public class MainMenu {
 			switch (choice) {
 			case 1:
 				System.out.println("Shop Settings");
-				// TODO: Handle Shop Settings menu options
-				break;
+				// TODO: Handle Shop Settings menu option
+				  while (true) {
+				        System.out.println("Shop Settings Menu");
+				        System.out.println("1. Load Data (Items and invoices)");
+				        System.out.println("2. Set Shop Name");
+				        System.out.println("3. Set Invoice Header (Tel / Fax / Email / Website)");
+				        System.out.println("4. Go Back");
+				        System.out.print("Enter your choice: ");
+				        
+				        userInput = input.nextInt();
+				        input.nextLine(); // consume newline character
+
+				        if(userInput == 1) {
+				            
+				                // load data implementation
+				        }
+				        else 
+				        	if(userInput == 2) {
+				                System.out.print("Enter shop name: ");
+				                String shopName = input.nextLine();
+				                // set shop name implementation
+				        }
+				        else 
+						      if(userInput == 3) {
+				                System.out.println("Enter invoice header information:");
+				                System.out.print("Tel: ");
+				                String tel = input.nextLine();
+				                System.out.print("Fax: ");
+				                String fax = input.nextLine();
+				                System.out.print("Email: ");
+				                String email = input.nextLine();
+				                System.out.print("Website: ");
+				                String website = input.nextLine();
+						      }
+				                // set invoice header implementation
+						        	
+						      
+						      else if(userInput == 4){
+				               exit = false;
+						      }
+						      else {
+						    	  System.out.println("Invalid choice, please try again.");
+						      }
+				  }
+		
 			case 2:
 				System.out.println("Manage Shop Items");
 				// TODO: Handle Manage Shop Items menu options
@@ -85,6 +141,6 @@ public class MainMenu {
 				break;
 			}
 		}
-		input.close();
+		
 	}
 }
