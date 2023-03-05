@@ -106,6 +106,7 @@ public class MainMenu {
 		
 			case 2:
 				System.out.println("Manage Shop Items");
+				
 				// TODO: Handle Manage Shop Items menu options
 				break;
 			case 3:
