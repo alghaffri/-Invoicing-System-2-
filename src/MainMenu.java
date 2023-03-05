@@ -1,4 +1,3 @@
-import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,6 +8,8 @@ public class MainMenu {
             + "name TEXT NOT NULL,"
             + "price REAL NOT NULL"
             + ")";
+    
+    
     private static final String CREATE_INVOICE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS invoices ("
             + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
             + "customer_name TEXT NOT NULL,"
