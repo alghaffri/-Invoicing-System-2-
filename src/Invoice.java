@@ -13,6 +13,9 @@ public class Invoice {
 
     public int getInvoiceNumber() {
         return invoiceNumber;
+        
+        
+        
     }
 
     public String getCustomerName() {
