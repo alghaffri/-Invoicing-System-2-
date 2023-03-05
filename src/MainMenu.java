@@ -1,7 +1,47 @@
+import java.beans.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
-
 public class MainMenu {
+    private static final String CREATE_PRODUCT_TABLE_SQL = "CREATE TABLE IF NOT EXISTS products ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "name TEXT NOT NULL,"
+            + "price REAL NOT NULL"
+            + ")";
+    private static final String CREATE_INVOICE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS invoices ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "customer_name TEXT NOT NULL,"
+            + "total REAL NOT NULL,"
+            + "balance REAL NOT NULL"
+            + ")";
+    private static final String CREATE_INVOICE_ITEM_TABLE_SQL = "CREATE TABLE IF NOT EXISTS invoice_items ("
+            + "invoice_id INTEGER NOT NULL,"
+            + "product_id INTEGER NOT NULL,"
+            + "quantity INTEGER NOT NULL,"
+            + "FOREIGN KEY (invoice_id) REFERENCES invoices (id),"
+            + "FOREIGN KEY (product_id) REFERENCES products (id)"
+            + ")";
+
+    public static void initializeDatabase(String url, String username, String password) {
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            java.sql.Statement stmt = conn.createStatement();
+            stmt.execute(CREATE_PRODUCT_TABLE_SQL);
+            stmt.execute(CREATE_INVOICE_TABLE_SQL);
+            stmt.execute(CREATE_INVOICE_ITEM_TABLE_SQL);
+        } catch (SQLException e) {
+            System.out.println("Error initializing database: " + e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
+    	  String url = "jdbc:sqlserver://localhost:1433;" +
+                  "databaseName=InvoicingSystem;" +
+                  "encrypt=true;" +
+                  "trustServerCertificate=true";
+          String user = "sa";
+          String pass = "root";
+        initializeDatabase(url, user, pass);
         Scanner input = new Scanner(System.in);
         Menu menu = new Menu();
         boolean exit = false;
