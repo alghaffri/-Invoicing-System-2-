@@ -1,32 +1,46 @@
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Menu {
-	private ArrayList<String> menuItems;
 
-	public Menu() {
-		menuItems = new ArrayList<String>();
-		menuItems.add("Shop Settings");
-		menuItems.add("Manage Shop Items");
-		menuItems.add("Create New Invoice");
-		menuItems.add("Report: Statistics");
-		menuItems.add("Report: All Invoices");
-		menuItems.add("Search Invoice");
-		menuItems.add("Program Statistics");
-		menuItems.add("Exit");
-	}
+	public static void showMenu(int option) {
 
-	public void showMenu() {
-		System.out.println("Application Main Menu:");
-		for (int i = 0; i < menuItems.size(); i++) {
-			System.out.println((i + 1) + "-" + menuItems.get(i));
+		List<String> MainMenu = Arrays.asList("1.Shop Settings", "2.Manage Shop Items", "3.Create New Invoice",
+				"4.Report: Statistics", "5.Report: All Invoices", "6.Search (1) Invoice", "7.Program Statistics",
+				"8.Exit");
+
+		List<String> shopMenu = Arrays.asList("createShopTable", "1. Load Data invoices ", "2.Load Data Items ",
+				"3.Set Shop Name", "4.Set Invoice Header (Tel / Fax / Email )", "5.Go Back");
+
+		List<String> itemMenu = Arrays.asList("createItemsTable", "1.insertIntoItemsTable", "2.Delete Items",
+				"3.Change Item Price", "4.Report All Items ", "5.Go Back");
+				
+
+		switch (option) {
+		case 1:
+			printMenu(MainMenu);
+			break;
+		case 2:
+			printMenu(shopMenu);
+			break;
+		case 3:
+			printMenu(itemMenu);
+
+			break;
+
 		}
+		
+		
+	}
+	
+	public static void printMenu(List<String> printMenu){
+		for(String x:printMenu) {
+			
+			System.out.println(x);
+
+		}
+		
+		
 	}
 
-	public ArrayList<String> getMenuItems() {
-		return menuItems;
-	}
-
-	public void setMenuItems(ArrayList<String> menuItems) {
-		this.menuItems = menuItems;
-	}
 }
