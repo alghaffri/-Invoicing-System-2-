@@ -1,121 +1,233 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-
 public class MainMenu {
-	 
-	    public static void main(String[] args) {
-	    	try {
-	    		 String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=SystemInvoice;" + "encrypt=true;"
-	    		 + "trustServerCertificate=true";
-	    		 String user = "sa";
-	    		 String password = "root";
-	    		 Connection conn = DriverManager.getConnection(url, user, password);
-	    		 System.out.println("Connection has been established.");
-	    		 } catch (SQLException e) {
-	    		 System.out.println(e.getMessage());
-	    		 }
 
-		Scanner input = new Scanner(System.in);
-		Menu menu = new Menu();
-		boolean exit = false;
-		int userInput;
-		while (!exit) {
-			menu.showMenu();
-			System.out.print("Select an option: ");
-			int choice = input.nextInt();
-
-			switch (choice) {
-			case 1:
-				System.out.println("Shop Settings");
-				// TODO: Handle Shop Settings menu option
-				  while (true) {
-				        System.out.println("Shop Settings Menu");
-				        System.out.println("1. Load Data (Items and invoices)");
-				        System.out.println("2. Set Shop Name");
-				        System.out.println("3. Set Invoice Header (Tel / Fax / Email / Website)");
-				        System.out.println("4. Go Back");
-				        System.out.print("Enter your choice: ");
-				        
-				        userInput = input.nextInt();
-				        input.nextLine(); // consume newline character
-
-				        if(userInput == 1) {
-				            
-				                // load data implementation
-				        }
-				        else 
-				        	if(userInput == 2) {
-				                System.out.print("Enter shop name: ");
-				                String shopName = input.nextLine();
-				                // set shop name implementation
-				        }
-				        else 
-						      if(userInput == 3) {
-				                System.out.println("Enter invoice header information:");
-				                System.out.print("Tel: ");
-				                String tel = input.nextLine();
-				                System.out.print("Fax: ");
-				                String fax = input.nextLine();
-				                System.out.print("Email: ");
-				                String email = input.nextLine();
-				                System.out.print("Website: ");
-				                String website = input.nextLine();
-						      }
-				                // set invoice header implementation
-						        	
-						      
-						      else if(userInput == 4){
-				               exit = false;
-						      }
-						      else {
-						    	  System.out.println("Invalid choice, please try again.");
-						      }
-				  }
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+Scanner sa = new Scanner(System.in);
 		
-			case 2:
-				System.out.println("Manage Shop Items");
-			
-				// TODO: Handle Manage Shop Items menu options
+		boolean Mainmenu = true;
+		boolean subMenue1=true;
+		boolean subMenue2 = true;
+		
+		while (Mainmenu) {
+		Menu.showMenu(1);
+			String bb = sa.next();
+			int option = Integer.parseInt(bb);
+
+			switch (option) {
+
+			case 1:
+				while(subMenue1){
+					Menu.showMenu(2);
+					
+					Scanner sc = new Scanner(System.in);
+
+					String bb1 = sc.next();
+					int options = Integer.parseInt(bb1);
+
+					switch (options){
+					
+	                 case 0:
+						
+						
+						Shop shop = new Shop ();
+						shop.createShopTable();
+						
+						
+						
+						
+						
+						break;
+					case 1:
+						
+						
+						Invoice invoice = new Invoice();
+						invoice.insertIntoInvoiceTable();
+						
+						
+					
+						break;
+						
+					case 2:	
+						
+						Items items= new Items();
+						items.insertIntoItemsTable();
+						
+						
+						
+						
+					case 3:
+						
+						Shop Shop=new Shop();
+						Shop.insertIntoShopTable();
+						
+						
+						
+						break;
+						
+						
+					case 4:
+						
+						
+						Shop shop1= new Shop();
+						shop1.insertIntoShopTable();
+						
+						
+						break;
+						
+						
+                    case 5:
+						
+                    	 subMenue1=false;
+                     	
+                     	Mainmenu = true;
+                    	
+						break;
+					}
+             
+					
+				}subMenue1=false; 
 				break;
+				
+				
+				
+			case 2:
+				while(subMenue2){
+				Menu.showMenu(3);
+					
+					Scanner sc = new Scanner(System.in);
+					String bb1 = sc.next();
+					int options = Integer.parseInt(bb1);
+
+					
+					switch (options){
+					
+					case 0:
+					
+						
+						Items items = new Items();
+						items.createItemsTable();
+						
+						break;
+						
+						
+					case 1:
+						Items items2= new Items();
+						items2.insertIntoItemsTable();
+						
+						break;
+						
+						
+						
+					case 2:
+						Items itemsDelete = new Items();
+						itemsDelete.deleteByItems();
+						
+						break;
+						
+						
+						
+					case 3:
+					Items itemsUpdate=new Items();
+						itemsUpdate.updateByItems();
+						
+						break;
+						
+					case 4:
+						Items items4=new Items();
+						items4.readFromTable();
+						
+						break;
+						
+						
+					case 5:	
+						subMenue2 = false;
+						Mainmenu = true;
+						break;
+						
+					}
+				break;
+				}subMenue2= false;
+				
+				
+				
+				
+				
+				
+				
+				
+				
 			case 3:
-				System.out.println("Create New Invoice");
-				// TODO: Handle Create New Invoice menu options
+				
+				Invoice invoice = new Invoice();
+				invoice.createInvoiceTable();
+				
+				
+				
+				
 				break;
 			case 4:
-				System.out.println("Report: Statistics");
-				// TODO: Handle Report Statistics menu options
-				break;
-			case 5:
-				System.out.println("Report: All Invoices");
-				// TODO: Handle Report All Invoices menu options
-				break;
-			case 6:
-				System.out.println("Search Invoice");
-				// TODO: Handle Search Invoice menu options
-				break;
-			case 7:
-				System.out.println("Program Statistics");
-				Shop Shop=new Shop();
-				Shop.insertIntoShopTable();
 				
-				// TODO: Handle Program Statistics menu options
+				
 				break;
+
+				
+				
+				
+				
+			case 5:
+				
+				
+				Invoice invoice5=new Invoice();
+				invoice5.readFromInvoiceTable();
+				break;
+
+				
+				
+				
+			case 6:
+				Invoice invoice6=new Invoice();
+				invoice6.getByIdInvoice();
+				
+				
+				break;
+
+				
+				
+				
+			case 7:
+				
+	
+				
+				
+				break;
+				
+				
+				
 			case 8:
-				System.out.print("Are you sure you want to exit? (y/n): ");
-				String answer = input.next();
-				if (answer.equalsIgnoreCase("y")) {
-					System.out.println("Exiting program...");
-					exit = true;
+				Scanner sc = new Scanner(System.in);
+				System.out.println("Are you sure you want to exit?");
+				String left = sc.next();
+				if(left.equals("yes")) {
+					System.exit(0);
+				}else {
+					
+					 Mainmenu = true;
+					 subMenue1=false;
+					 subMenue2 = false;
 				}
-				break;
-			default:
-				System.out.println("Invalid choice. Please try again.");
-				break;
-			}
-		}
-		
+
+						 
+					
+					
+			
+			break;
+		}	
+			
+		}Mainmenu = false;
+
+
 	}
+
 }
