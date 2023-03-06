@@ -1,23 +1,38 @@
 public class Product {
-	private String name;
-	private double price;
-
-	public Product(String name, double price) {
-		this.name = name;
-		this.price = price;
+	private int  itemID;
+	private String  itemName;
+	private String  unitPrice;
+	private int quantity;
+	private int qtyAmount;
+	public int getItemID() {
+		return itemID;
 	}
-
-	public String getName() {
-
-		return name;
+	public void setItemID(int itemID) {
+		this.itemID = itemID;
 	}
-
-	public double getPrice() {
-		return price;
+	public String getItemName() {
+		return itemName;
 	}
-
-	public double getQtyAmount() {
-		// TODO Auto-generated method stub
-		return 0;
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
+	public String getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(String unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	public int getQtyAmount() {
+		return qtyAmount;
+	}
+	public void setQtyAmount(int qtyAmount) {
+		this.qtyAmount = qtyAmount;
+	}
+	
 }
