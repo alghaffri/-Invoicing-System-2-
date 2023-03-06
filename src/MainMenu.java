@@ -51,7 +51,7 @@ Scanner sa = new Scanner(System.in);
 						
 					case 2:	
 						
-						Items items= new Items();
+						Item items= new Item();
 						items.insertIntoItemsTable();
 						
 						
@@ -106,14 +106,14 @@ Scanner sa = new Scanner(System.in);
 					case 0:
 					
 						
-						Items items = new Items();
+						Item items = new Item();
 						items.createItemsTable();
 						
 						break;
 						
 						
 					case 1:
-						Items items2= new Items();
+						Item items2= new Item();
 						items2.insertIntoItemsTable();
 						
 						break;
@@ -121,7 +121,7 @@ Scanner sa = new Scanner(System.in);
 						
 						
 					case 2:
-						Items itemsDelete = new Items();
+						Item itemsDelete = new Item();
 						itemsDelete.deleteByItems();
 						
 						break;
@@ -129,13 +129,13 @@ Scanner sa = new Scanner(System.in);
 						
 						
 					case 3:
-					Items itemsUpdate=new Items();
+					Item itemsUpdate=new Item();
 						itemsUpdate.updateByItems();
 						
 						break;
 						
 					case 4:
-						Items items4=new Items();
+						Item items4=new Item();
 						items4.readFromTable();
 						
 						break;
