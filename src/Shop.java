@@ -44,7 +44,7 @@ public class Shop {
 		this.email = email;
 	}
 
-	public static boolean createShopTable() {
+	public static void createShopTable() {
 		
 		 String url = "jdbc:sqlserver://localhost:1433;" +
 	             "databaseName=Invoice;" +
@@ -54,13 +54,14 @@ public class Shop {
 	     String pass = "root";
 		try (Connection connection = DriverManager.getConnection(url, user, pass);
 				 java.sql.Statement statement = connection.createStatement()) {
-			  String Table = "CREATE TABLE Shop "+"(id INTEGER NOT NULL, "+" shopName VARCHAR(80), "+" telephone INTEGER,"+" Fax VARCHAR(80), "+" email VARCHAR(80),  "+" PRIMARY KEY ( id ))";
+			  String Table = "CREATE TABLE Shop "+"(id INTEGER NOT NULL, "+" shopName VARCHAR(80), "+" "
+			  		+ "telephone INTEGER,"+" Fax VARCHAR(80), "+" email VARCHAR(80),  "+" PRIMARY KEY ( id ))";
 			statement.executeUpdate(Table);
 			System.out.println("Tables created successfully.");
 		} catch (SQLException e) {
 			System.out.println("Error creating tables: " + e.getMessage());
 		}
-		return false;
+	
 	}
 
 	

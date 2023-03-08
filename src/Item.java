@@ -1,5 +1,9 @@
 import java.beans.Statement;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,50 +53,34 @@ public class Item {
 	
 	
 	
-	public static boolean createItemsTable() {
-		 String url = "jdbc:sqlserver://localhost:1433;" +
-	                "databaseName=Invoice;" +
-	                "encrypt=true;" +
-	                "trustServerCertificate=true";
-	        String user = "sa";
-	        String pass = "root";
-		String sqlDB = "CREATE TABLE Items ("
-                + "id INT NOT NULL AUTO_INCREMENT,"
-                + "name VARCHAR(50) NOT NULL,"
-                + "price DECIMAL(10, 2) NOT NULL,"
-                + "PRIMARY KEY (id)"
-                + ")";
-		java.sql.Connection conn = null;
-		 Connection conn1 = null;
-	        Statement stmt = null;
-	        
-	        try {
-	            conn = DriverManager.getConnection(url, user, pass);
-	            stmt = (Statement) conn.createStatement();
-	            
-	            String sql = "CREATE TABLE mytable (" +
+	public static void createItemsTable() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+		 String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
+		            + "trustServerCertificate=true";
+		    String username = "sa";
+		    String password = "root";
+		    Scanner scanner = new Scanner(System.in);
+		    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+		    System.out.println("Enter the number of invoices to create:");
+		    int numberOfInvoices = scanner.nextInt();
+		    Connection connection = null;
+		    try {
+		        Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+		        DriverManager.registerDriver(driver);
+		        connection = DriverManager.getConnection(url, username, password);
+		        DatabaseMetaData metadata = connection.getMetaData();
+		        ResultSet resultSet = metadata.getTables(null, null, "CUSTOMER_INVOICE", null);
+	            String sql = "CREATE TABLE Item (" +
 	                            "id INT PRIMARY KEY, " +
 	                            "name VARCHAR(50) NOT NULL, " +
 	                            "age INT NOT NULL)";
-	            
-	            ((java.sql.Statement) stmt).executeUpdate(sql);
+	           
 	            System.out.println("Table created successfully!");
 	            
 	        } catch (SQLException e) {
 	            e.printStackTrace();
-	        } finally {
-	            try {
-	                if (stmt != null) {
-	                  
-	                }
-	                if (conn != null) {
-	                    conn.close();
-	                }
-	            } catch (SQLException e) {
-	                e.printStackTrace();
-	            }
+	        
 	        }
-			return false;
+
 	    }
 	
 	
