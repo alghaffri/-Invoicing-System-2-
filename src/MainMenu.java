@@ -55,19 +55,19 @@ public class MainMenu {
 					case 2:
 
 						Item items = new Item();
-						items.insertIntoItemsTable();
+						
 
 					case 3:
 
 						Shop Shop = new Shop();
-						Shop.insertIntoShopTable();
+						Shop.createShopTable();
 
 						break;
 
 					case 4:
 
 						Shop shop1 = new Shop();
-						shop1.insertIntoShopTable();
+						shop1.insertDataToShopTable();
 
 						break;
 
@@ -96,14 +96,12 @@ public class MainMenu {
 
 					case 0:
 
-						Item items = new Item();
-						items.createItemsTable();
+				
 
 						break;
 
 					case 1:
 						Item items2 = new Item();
-						items2.insertIntoItemsTable();
 
 						break;
 
@@ -146,6 +144,7 @@ public class MainMenu {
 				break;
 
 			case 5:
+				
 
 				Invoice invoice5 = new Invoice();
 				invoice5.readFromInvoiceTable();
@@ -158,6 +157,8 @@ public class MainMenu {
 				break;
 
 			case 7:
+				Item items = new Item();
+				items.createItemsTable();
 
 				break;
 

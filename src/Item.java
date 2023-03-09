@@ -1,4 +1,4 @@
-import java.beans.Statement;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 
@@ -53,130 +54,77 @@ public class Item {
 	
 	
 	
-	public static void createItemsTable() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public static void createItemsTable() {
 		 String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
 		            + "trustServerCertificate=true";
-		    String username = "sa";
-		    String password = "root";
-		    Scanner scanner = new Scanner(System.in);
-		    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-		    System.out.println("Enter the number of invoices to create:");
-		    int numberOfInvoices = scanner.nextInt();
-		    Connection connection = null;
-		    try {
-		        Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
-		        DriverManager.registerDriver(driver);
-		        connection = DriverManager.getConnection(url, username, password);
-		        DatabaseMetaData metadata = connection.getMetaData();
-		        ResultSet resultSet = metadata.getTables(null, null, "CUSTOMER_INVOICE", null);
-	            String sql = "CREATE TABLE Item (" +
-	                            "id INT PRIMARY KEY, " +
-	                            "name VARCHAR(50) NOT NULL, " +
-	                            "age INT NOT NULL)";
-	           
-	            System.out.println("Table created successfully!");
-	            
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        
-	        }
-
-	    }
-	
-	
-	public static void insertIntoItemsTable()
-			throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-		Scanner sa = new Scanner(System.in);
-		
-		System.out.println("PLS Enter item Name");
-		String item_Name = sa.next();
-		
-		System.out.println("PLS Enter unit Price");
-		String unitPrice = sa.next();
-		
-		System.out.println("PLS Enter quantity");
-		int quantity = sa.nextInt();
-		
-		System.out.println("PLS Enter qtyAmount");
-		int qtyAmount = sa.nextInt();
-		
-		System.out.println("PLS Enter shop name you want");
-		String name = sa.next();
-		
-		String sql = "select id  from Shop where ShopName ='" + name + "'";
-		Connection con = null;
+		String username = "sa";
+		String password = "root";
+		Scanner scanner = new Scanner(System.in);
 		try {
-		    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		    String url1 = "jdbc:sqlserver://localhost:1433;" +
-	                "databaseName=Invoice;" +
-	                "encrypt=true;" +
-	                "trustServerCertificate=true";
-	        String user1 = "sa";
-	        String pass1 = "root";
-		    Connection con1 = DriverManager.getConnection(url1);
-		    
-		    PreparedStatement pstmt = con1.prepareStatement(sql);
-			try {
-				int shop_id = 0;
-				ResultSet rs = pstmt.executeQuery();
-				if (rs.next()) {
-					shop_id = rs.getInt("id");
-				}
-				sql = "INSERT INTO Items(itemId,itemName,unitPrice,quantity,qtyAmount,Shop_id)VALUES";
-				try {
-					PreparedStatement pstmt3 = con.prepareStatement(sql);
-					pstmt3.setString(2, item_Name);
-					pstmt3.setString(3, unitPrice);
-					pstmt3.setInt(4, quantity);
-					pstmt3.setInt(5, qtyAmount);
-					pstmt3.setInt(6, shop_id);
-					pstmt3.executeUpdate();
-					System.out.println("added successfully");
-					Statement st = (Statement) con.createStatement();
-					int m = ((java.sql.Statement) st).executeUpdate(sql);
-					if (m >= 1) {
-						System.out.println("Inserte table in database is success...");
-					} else {
-						System.out.println(" table already Inserte in given database...");
-					}
-					con.close();
-				} catch (Exception e) {
-				    e.printStackTrace();
-				}			} catch (SQLException e) {
-				System.out.println(e);
-			}
-		} catch (SQLException e) {
-			System.out.println(e);
+		Connection connection = null;
+		Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+		DriverManager.registerDriver(driver);
+		connection = DriverManager.getConnection(url, username, password);
+		Statement statement = connection.createStatement();
+		String createTableSql = "CREATE TABLE Item (" +
+		"id INT PRIMARY KEY, " +
+		"name VARCHAR(50) NOT NULL, " +
+		"price FLOAT NOT NULL, " +
+		"quantity INT NOT NULL)";
+		statement.executeUpdate(createTableSql);
+		System.out.println("Table created successfully");
+		int numberOfItems = 0;
+		while (numberOfItems <= 0) {
+		System.out.println("Enter the number of items to add:");
+		numberOfItems = scanner.nextInt();
 		}
-	}
+		for (int i = 0; i < numberOfItems; i++) {
+		System.out.println("++++++++ Item " + (i + 1) + " ++++++++");
+		System.out.println("Enter item ID:");
+		int id = scanner.nextInt();
+		scanner.nextLine(); // consume the remaining newline character
+		System.out.println("Enter item name:");
+		String name = scanner.nextLine();
+		System.out.println("Enter item price:");
+		float price = scanner.nextFloat();
+		System.out.println("Enter item quantity:");
+		int quantity = scanner.nextInt();
+		String insertSql = "INSERT INTO Item(id, name, price, quantity) VALUES(?, ?, ?, ?)";
+		PreparedStatement ps = connection.prepareStatement(insertSql);
+		ps.setInt(1, id);
+		ps.setString(2, name);
+		ps.setFloat(3, price);
+		ps.setInt(4, quantity);
+		ps.executeUpdate();
+		System.out.println("Data successfully inserted");
+		}
+		} catch (Exception ex) {
+		System.err.println(ex);
+		}
+		
+		}
+		
+		
 	
 	
 	public static void deleteByItems()  {
-		 String url = "jdbc:sqlserver://localhost:1433;" +
-	                "databaseName=Invoice;" +
-	                "encrypt=true;" +
-	                "trustServerCertificate=true";
-	        String user = "sa";
-	        String pass = "root";
-		Connection con = null;
+		 String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
+		            + "trustServerCertificate=true";
+		String username = "sa";
+		String password = "root";
+		Scanner scanner = new Scanner(System.in);
 		try {
-		    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		    String url1 = "jdbc:sqlserver://localhost:1433;" +
-	                "databaseName=Invoice;" +
-	                "encrypt=true;" +
-	                "trustServerCertificate=true";
-	        String user2 = "sa";
-	        String pass3 = "root";
-		    Connection con1 = DriverManager.getConnection(url1);
-		    
-		    PreparedStatement pstmt = con1.prepareStatement(url1);
-			java.sql.Statement st =con.createStatement();
+		Connection connection = null;
+		Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+		DriverManager.registerDriver(driver);
+		connection = DriverManager.getConnection(url, username, password);
+		Statement statement = connection.createStatement();
 			
-			Scanner scanner = new Scanner(System.in);
+			Scanner scanner1 = new Scanner(System.in);
 			System.out.println("Please Enter id you want to delete :");
 			String userinput = scanner.next();
 			String sql = "delete from Items where id ='" + userinput + "'";
-			int result = ((java.sql.Statement) st).executeUpdate(sql);
+		
 			
 		} catch (Exception excep) {
 			System.err.println(excep);
@@ -232,29 +180,20 @@ public class Item {
 	
 	
 	public static void readFromTable() {
-		 String url = "jdbc:sqlserver://localhost:1433;" +
-	                "databaseName=Invoice;" +
-	                "encrypt=true;" +
-	                "trustServerCertificate=true";
-	        String user = "sa";
-	        String pass = "root";
-		String sql = "SELECT * FROM Items";
-		
-
-		java.sql.Connection conn = null;
-		try {
-		    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		    String url1 = "jdbc:sqlserver://localhost:1433;" +
-	                "databaseName=Invoice;" +
-	                "encrypt=true;" +
-	                "trustServerCertificate=true";
-	        String user2 = "sa";
-	        String pass3 = "root";
-		    Connection con1 = DriverManager.getConnection(url1);
-		    
-		    PreparedStatement pstmt = con1.prepareStatement(url1);
-			java.sql.Statement st = conn.createStatement();
-			ResultSet resultSet = st.executeQuery(sql);
+		 String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
+		            + "trustServerCertificate=true";
+		    String username = "sa";
+		    String password = "root";
+		    Scanner scanner = new Scanner(System.in);
+		   
+		    int numberOfInvoices = scanner.nextInt();
+		    Connection connection = null;
+		    try {
+		        Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+		        DriverManager.registerDriver(driver);
+		        connection = DriverManager.getConnection(url, username, password);
+		        DatabaseMetaData metadata = connection.getMetaData();
+		        ResultSet resultSet = metadata.getTables(null, null, "TABLE", null);
 			int count = 1;
 			while (resultSet.next()) {
 				System.out.println("##########################");
@@ -268,7 +207,7 @@ public class Item {
 
 			}
 
-			conn.close();
+			
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}

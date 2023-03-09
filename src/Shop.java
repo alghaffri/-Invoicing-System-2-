@@ -1,7 +1,8 @@
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class Shop {
@@ -35,6 +36,7 @@ public class Shop {
 	public void setFax(String fax) {
 		Fax = fax;
 	}
+	
 
 	public String getEmail() {
 		return email;
@@ -43,77 +45,79 @@ public class Shop {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+    Scanner scanner = new Scanner(System.in);
 
-	public static void createShopTable() {
-		
-		 String url = "jdbc:sqlserver://localhost:1433;" +
-	             "databaseName=Invoice;" +
-	             "encrypt=true;" +
-	             "trustServerCertificate=true";
-	     String user = "sa";
-	     String pass = "root";
-		try (Connection connection = DriverManager.getConnection(url, user, pass);
-				 java.sql.Statement statement = connection.createStatement()) {
-			  String Table = "CREATE TABLE Shop "+"(id INTEGER NOT NULL, "+" shopName VARCHAR(80), "+" "
-			  		+ "telephone INTEGER,"+" Fax VARCHAR(80), "+" email VARCHAR(80),  "+" PRIMARY KEY ( id ))";
-			statement.executeUpdate(Table);
-			System.out.println("Tables created successfully.");
-		} catch (SQLException e) {
-			System.out.println("Error creating tables: " + e.getMessage());
+	 String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
+	            + "trustServerCertificate=true";
+	    String username = "sa";
+	    String password = "root";
+
+	public void createShopTable() {
+		 try {
+		 Connection connection = null;
+		 // Load SQL Server JDBC driver
+		 Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+		 DriverManager.registerDriver(driver);
+		 // Establish database connection
+		 connection = DriverManager.getConnection(url, username, password);
+		 Statement statement = connection.createStatement();
+		 // Create a table named "shop"
+		 String createTableQuery = "CREATE TABLE shop (" 
+		      + "name varchar(50) ," 
+		      + "telephone VARCHAR(255) NOT NULL,"
+		      + "fax VARCHAR(255)," 
+		      + "email varchar(50) NOT NULL," 
+		      + "website varchar(50)" 
+		      + ")";
+		 // Execute the query to create the table
+		 ResultSet resultSet = statement.executeQuery(createTableQuery);
+		 // Close the database connection
+		 connection.close();
+		 } catch (Exception exception) {
+		 System.err.println(exception);
+		 }
 		}
+
+
 	
-	}
-
+	public void insertDataToShopTable() {
+		 try {
+		 Connection connection = null;
+		 // Load SQL Server JDBC driver
+		 Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+		 DriverManager.registerDriver(driver);
+		 // Establish database connection
+		 connection = DriverManager.getConnection(url, username, password);
+		 Statement statement = connection.createStatement();
+		 // Create a new shop object and set its properties based on user input
+		 Shop shop = new Shop();
+		 System.out.print("Enter shop name: ");
+		 String shopName = scanner.nextLine();
+		 shop.setShopName(shopName);
+		 System.out.print("Enter telephone number: ");
+		 int telephone = scanner.nextInt();
+		 shop.setTelephone(telephone);
+		 System.out.print("Enter fax number: ");
+		 String fax = scanner.nextLine();
+		 shop.setFax(fax);
+		 System.out.print("Enter email address: ");
+		 String email = scanner.nextLine();
+		 shop.setEmail(email);
 	
-	public static void insertIntoShopTable() {
-
-
-		Scanner sa = new Scanner(System.in);
-
-		
-		System.out.println(" Enter shop Name ");
-		String shop_Name = sa.next();
-	
-		System.out.println(" Enter telephone");
-		int telephone = sa.nextInt();
-		
-		System.out.println(" Enter Fax ");
-		String Fax = sa.next();
-		
-		System.out.println(" Enter email ");
-		String email = sa.next();
-		 String url = "jdbc:sqlserver://localhost:1433;" +
-	                "databaseName=Invoice;" +
-	                "encrypt=true;" +
-	                "trustServerCertificate=true";
-	        String user = "sa";
-	        String pass = "root";
-
-			String InsertShop = "INSERT INTO  Shop(shopName,telephone,Fax,email )"+" VALUES ('" + shop_Name+ "'," +telephone +",'"+Fax+"','"+email +"' )";			
-			java.sql.Connection conn = null;
-			try {
-			    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			    String url1 = "jdbc:sqlserver://localhost:1433;" +
-		                "databaseName=Invoice;" +
-		                "encrypt=true;" +
-		                "trustServerCertificate=true";
-		        String user1 = "sa";
-		        String pass1 = "root";
-			    Connection con1 = DriverManager.getConnection(url1);
-			    
-			    PreparedStatement pstmt = con1.prepareStatement(InsertShop);
-				java.sql.Statement st = conn.createStatement();
-				int m = st.executeUpdate(InsertShop);
-				if (m >= 1) {
-					System.out.println("inserted data successfuly...");
-
-				} else {
-					System.out.println(" faild inserted data...");
-				}
-				conn.close();
-			} catch (Exception ex) {
-				System.err.println(ex);
-			}
-
+		 // Construct SQL query to insert the shop data into the shop table
+		 String insertQuery = "INSERT INTO shop (name, telephone, fax, email, website) VALUES ('" 
+		      + shopName + "', '" + telephone + "', '" + fax + "', '" + email + "')";
+		 // Execute the query to insert the data
+		 int rowsAffected = statement.executeUpdate(insertQuery);
+		 if (rowsAffected >= 1) {
+		 System.out.println("Data inserted successfully: " + insertQuery);
+		 } else {
+		 System.out.println("Data insertion failed");
+		 }
+		 // Close the database connection
+		 connection.close();
+		 } catch (Exception exception) {
+		 System.err.println(exception);
+		 }
 		}
-	}
+}

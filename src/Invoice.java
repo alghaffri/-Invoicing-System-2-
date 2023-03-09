@@ -1,4 +1,3 @@
-import java.beans.Statement;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -127,13 +126,13 @@ public class Invoice {
 	            float balance = paidAmount - totalAmount;
 	            String insertSql = "INSERT INTO CUSTOMER_INVOICE(Customer_Full_Name,Phone_Number,Invoice_Date,Number_Of_Items,Total_Amount,Paid_Amount,Balance) VALUES(?,?,?,?,?,?,?)";
 	            PreparedStatement ps = connection.prepareStatement(insertSql);
-	            ps.setString(1, customerName);
-	            ps.setInt(2, phoneNumber);
-	            ps.setString(3, invoiceDate);
-	            ps.setInt(4, numberOfItems);
-	            ps.setFloat(5, totalAmount);
-	            ps.setFloat(6, paidAmount);
-	            ps.setFloat(7, balance);
+	            ps.setString(3, customerName);
+	            ps.setInt(3, phoneNumber);
+	            ps.setString(4, invoiceDate);
+	            ps.setInt(5, numberOfItems);
+	            ps.setFloat(6, totalAmount);
+	            ps.setFloat(7, paidAmount);
+	            ps.setFloat(8, balance);
 	            ps.executeUpdate();
 	            System.out.println("Data successfully inserted");
 	        }
@@ -154,40 +153,39 @@ public class Invoice {
 	
 
 	public static void readFromInvoiceTable() {
-		String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
-				+ "trustServerCertificate=true";
-		String user = "sa";
-		String pass = "root";
-		String sql = "SELECT * FROM Invoice";
-
-		java.sql.Connection conn = null;
+	
+		String sql = "SELECT * FROM CUSTOMER_INVOICE";
+		Connection con1 = null;
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String url1 = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
-					+ "trustServerCertificate=true";
-			String user1 = "sa";
-			String pass1 = "root";
-			Connection con1 = DriverManager.getConnection(url1);
+			String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
+		            + "trustServerCertificate=true";
+		    String username = "sa";
+		    String password = "root";
+			Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+	        DriverManager.registerDriver(driver);
+	        con1 = DriverManager.getConnection(url, username, password);
+			
+
 
 			PreparedStatement pstmt = con1.prepareStatement(sql);
-			java.sql.Statement st = conn.createStatement();
+			java.sql.Statement st = con1.createStatement();
 			ResultSet resultSet = st.executeQuery(sql);
 			int count = 1;
 			while (resultSet.next()) {
 				System.out.println("+++++++++++++++++++++++++");
 				System.out.println("id:" + " " + resultSet.getInt(1));
-				System.out.println("customerName:" + " " + resultSet.getString(2));
-				System.out.println("phone_Number:" + " " + resultSet.getInt(3));
-				System.out.println("invoice_Date:" + " " + resultSet.getDate(4));
-				System.out.println(" number_Items:" + " " + resultSet.getInt(5));
-				System.out.println(" total_Amount:" + " " + resultSet.getInt(6));
-				System.out.println(" paid_Amoun:" + " " + resultSet.getInt(6));
-				System.out.println(" balance:" + " " + resultSet.getInt(6));
-				System.out.println(" item_Id:" + " " + resultSet.getInt(6));
+				System.out.println("customerName:  " + resultSet.getString(3));
+				System.out.println("phone_Number:  " + resultSet.getInt(4));
+				System.out.println("invoice_Date:  " + resultSet.getInt(5));
+				System.out.println(" number_Items:  " + resultSet.getInt(6));
+				System.out.println(" total_Amount:  " + resultSet.getInt(7));
+				System.out.println(" paid_Amoun: " + resultSet.getInt(8));
+				
+				
 
 			}
 
-			conn.close();
+			con1.close();
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
@@ -196,45 +194,41 @@ public class Invoice {
 
 	public static void getByIdInvoice() {
 
-		String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
-				+ "trustServerCertificate=true";
-		String user = "sa";
-		String pass = "root";
 		Scanner sa = new Scanner(System.in);
 		System.out.println(" input ID :");
 		int user1 = sa.nextInt();
 
-		String sql = "select * from Invoice inner join items on items.id = invoice.Items_id where invoice.id=" + user
+		String sql = "select * from CUSTOMER_INVOICE inner join Item on Item.id = invoice.Items_id where invoice.id=" + user1
 				+ "";
 
-		java.sql.Connection conn = null;
+		Connection con1 = null;
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String url1 = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
-					+ "trustServerCertificate=true";
-			String user4 = "sa";
-			String pass1 = "root";
-			Connection con1 = DriverManager.getConnection(url1);
+			String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
+		            + "trustServerCertificate=true";
+		    String username = "sa";
+		    String password = "root";
+			Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+	        DriverManager.registerDriver(driver);
+	        con1 = DriverManager.getConnection(url, username, password);
 
 			PreparedStatement pstmt = con1.prepareStatement(sql);
-			java.sql.Statement st = conn.createStatement();
+			java.sql.Statement st = con1.createStatement();
 			ResultSet resultSet = st.executeQuery(sql);
 			int count = 0;
 
 			while (resultSet.next()) {
-
+				System.out.println("+++++++++++++++++++++++++");
 				System.out.println("id:" + " " + resultSet.getInt(1));
-				System.out.println("customerName:" + " " + resultSet.getString(2));
-				System.out.println("phone_Number:" + " " + resultSet.getInt(3));
-				System.out.println("invoice_Date:" + " " + resultSet.getDate(4));
-				System.out.println(" number_Items:" + " " + resultSet.getInt(5));
-				System.out.println(" total_Amount:" + " " + resultSet.getInt(6));
-				System.out.println(" paid_Amoun:" + " " + resultSet.getInt(6));
-				System.out.println(" balance:" + " " + resultSet.getInt(6));
+				System.out.println("customerName:  " + resultSet.getString(3));
+				System.out.println("phone_Number:  " + resultSet.getInt(4));
+				System.out.println("invoice_Date:  " + resultSet.getInt(5));
+				System.out.println(" number_Items:  " + resultSet.getInt(6));
+				System.out.println(" total_Amount:  " + resultSet.getInt(7));
+				System.out.println(" paid_Amoun: " + resultSet.getInt(8));
 
 			}
 
-			conn.close();
+			con1.close();
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
