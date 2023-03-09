@@ -1,186 +1,141 @@
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MainMenu {
 
-	public static void main(String[] args)
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		Scanner sa = new Scanner(System.in);
-		String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=Invoice;" + "encrypt=true;"
-				+ "trustServerCertificate=true";
-		String username = "sa";
-		String password = "root";
-		boolean Mainmenu = true;
-		boolean subMenue1 = true;
-		boolean subMenue2 = true;
-		
-		System.out.print("Please Enter User Name: ");
-		String user = sa.next();
-		System.out.print("Please Enter Password: ");
-		String pass = sa.next();
-		if(!user.equalsIgnoreCase(username) || !pass.equalsIgnoreCase(password)) {
-			Mainmenu = false;
-			System.out.println("Wrong user or password");
-		}
-		while (Mainmenu) {
-			Menu.showMenu(1);
-			String bb = sa.next();
-			int option = Integer.parseInt(bb);
+	 public static void main(String[] args) throws IOException, InterruptedException {
+	        
+	        Shop shop = new Shop();
+	        // To load the data to the arraylist to be avalible once the program starts
+	        //shop.loadItemsFromFile();
+	        //shop.loadInvoice();
 
-			switch (option) {
+	        boolean mainMenu = true;
+	        Scanner userInput = new Scanner(System.in);
+	        System.out.println("Enter user :");
+	        String user = userInput.nextLine();
+	        System.out.println("Enter Pasword :");
+	        String Pasword = userInput.nextLine();
+	        if(!user.equalsIgnoreCase("sa") || !Pasword.equalsIgnoreCase("root")) {
+	        	System.out.println("Wrong info");
+	        	mainMenu = false;
+	        }
+	        while (mainMenu) {
+	            Menu.showMenu(1);;
+	            try {
 
-			case 1:
-				while (subMenue1) {
-					Menu.showMenu(2);
+	                System.out.print("Enter your choice: ");
+	                int choice = userInput.nextInt();
 
-					Scanner sc = new Scanner(System.in);
+	                switch (choice) {
+	                /*
+	                 *  A switch case to handle the navigation between options in the Shop Settings Menu
+	                 */
+	                case 1:
+	                    Menu.showMenu(2);;
+	                    System.out.print("Enter your choice: ");
+	                    int shopSettingChoice = userInput.nextInt();
 
-					String bb1 = sc.next();
-					int options = Integer.parseInt(bb1);
+	                    switch (shopSettingChoice) {
+	                    case 1:
+	                    	Item.readFromTable();
+	                        break;
+	                    case 2:
+	                        System.out.print("Enter Shop Name : ");
+	                        shop.setShopName(userInput.nextLine());
+	                        //shop.createShopTable();
+	                        break;
+	                    case 3:
+	                       
+	                        shop.insertDataToShopTable();
+	        
+	                        break;
+	                    case 4:
 
-					switch (options) {
+	                        System.out.println("Going back to the previous menu...");
 
-					case 0:
+	                        break;
+	                    }
 
-						Shop shop = new Shop();
-						shop.createShopTable();
+	                    break;
+	                    /*
+	                     *  A switch case to handlw the navigation between options in the Manage Shop Items Menu
+	                     */
+	                case 2:
+	                    Menu.showMenu(3);;
+	                    System.out.print("Enter your choice: ");
+	                    int manageShopItemsChoice = userInput.nextInt();
 
-						break;
-					case 1:
+	                    switch (manageShopItemsChoice) {
 
-						Invoice invoice = new Invoice();
+	                    case 1:
+	                        // Add Items and save them to a file
+	                       // shop.addItem();
+	                        System.out.println("Added the Item Successfully");
+	                        break;
+	                    case 2:
+	                        // Show the Avalible Items and Promote the user to enter
+	                        // which Item Id to be deleted
+	                      //  shop.printItems();
+	                        System.out.println("Enter the ItemID:");
+	                        int userChoice =userInput.nextInt();
+	                      //  shop.deleteItem(userChoice);
+	                        System.out.println("Deleted");
+	                        break;
+	                    case 3:
+	                        // Change Item Price
+	                        break;
+	                    case 4:
+	                        // Report All the Items
+	                      //  shop.loadItemsFromFile();
+	                      //  shop.printItems();
+	                        break;
+	                    case 5:
+	                        // Go BACK
+	                        System.out.println("Going back to the previous menu...");
+	                        Menu.showMenu(1);;
+	                        break;
+	                    }
+	                    break;
 
-						break;
+	                case 3:
+	                  
+	                    //shop.printItems();
+	                    
+	                  
+	                   Invoice.createInvoiceTable();
+	                    System.out.println("Invoice created Successfully");
+	                    break;
+	                case 4:
+	                    // Report: Statistics (No Of Items, No of Invoices, Total Sales)
+	                    break;
+	                case 5:
+	                   Invoice.readFromInvoiceTable();
+	                    break;
+	                case 6:
+	                	Invoice.searchInvoiceById();
+	                    break;
+	                case 7:      
+	                    //program statsitcs
+	                    break;
+	                case 8:
+	                    System.out.print("Are you sure you want to exit? (yes/no): ");
+	                    String exitChoice = userInput.next();
+	                    if (exitChoice.equals("yes")) {
+	                        System.out.println("Exiting the program...");
+	                        return;
+	                    }
+	                    break;
+	                }  
+	            } catch (InputMismatchException e) {
+	                System.out.println("Invalid input, please enter a number.");
+	                userInput.nextLine(); // clear the input buffer
 
-					case 2:
+	            }
 
-						Item items = new Item();
-						
-
-					case 3:
-
-						Shop Shop = new Shop();
-						Shop.createShopTable();
-
-						break;
-
-					case 4:
-
-						Shop shop1 = new Shop();
-						shop1.insertDataToShopTable();
-
-						break;
-
-					case 5:
-
-						subMenue1 = false;
-
-						Mainmenu = true;
-
-						break;
-					}
-
-				}
-				subMenue1 = false;
-				break;
-
-			case 2:
-				while (subMenue2) {
-					Menu.showMenu(3);
-
-					Scanner sc = new Scanner(System.in);
-					String bb1 = sc.next();
-					int options = Integer.parseInt(bb1);
-
-					switch (options) {
-
-					case 0:
-
-				
-
-						break;
-
-					case 1:
-						Item items2 = new Item();
-
-						break;
-
-					case 2:
-						Item itemsDelete = new Item();
-						itemsDelete.deleteByItems();
-
-						break;
-
-					case 3:
-						Item itemsUpdate = new Item();
-						itemsUpdate.updateByItems();
-
-						break;
-
-					case 4:
-						Item items4 = new Item();
-						items4.readFromTable();
-
-						break;
-
-					case 5:
-						subMenue2 = false;
-						Mainmenu = true;
-						break;
-
-					}
-					break;
-				}
-				subMenue2 = false;
-
-			case 3:
-
-				Invoice invoice = new Invoice();
-				invoice.createInvoiceTable();
-
-				break;
-			case 4:
-
-				break;
-
-			case 5:
-				
-
-				Invoice invoice5 = new Invoice();
-				invoice5.readFromInvoiceTable();
-				break;
-
-			case 6:
-				Invoice invoice6 = new Invoice();
-				invoice6.getByIdInvoice();
-
-				break;
-
-			case 7:
-				Item items = new Item();
-				items.createItemsTable();
-
-				break;
-
-			case 8:
-				Scanner sc = new Scanner(System.in);
-				System.out.println("Are you sure you want to exit?");
-				String left = sc.next();
-				if (left.equals("yes")) {
-					System.exit(0);
-				} else {
-
-					Mainmenu = true;
-					subMenue1 = false;
-					subMenue2 = false;
-				}
-
-				break;
-			}
-
-		}
-		Mainmenu = false;
-
-	}
+	        }
+	    }
 
 }

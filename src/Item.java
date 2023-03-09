@@ -1,13 +1,10 @@
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
@@ -193,7 +190,7 @@ public class Item {
 		        DriverManager.registerDriver(driver);
 		        connection = DriverManager.getConnection(url, username, password);
 		        DatabaseMetaData metadata = connection.getMetaData();
-		        ResultSet resultSet = metadata.getTables(null, null, "TABLE", null);
+		        ResultSet resultSet = metadata.getTables(null, null, "shop", null);
 			int count = 1;
 			while (resultSet.next()) {
 				System.out.println("##########################");

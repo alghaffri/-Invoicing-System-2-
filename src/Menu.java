@@ -9,8 +9,8 @@ public class Menu {
 				"4.Report: Statistics", "5.Report: All Invoices", "6.Search (1) Invoice", "7.Program Statistics",
 				"8.Exit");
 
-		List<String> shopMenu = Arrays.asList("createShopTable", "1. Load Data invoices ", "2.Load Data Items ",
-				"3.Set Shop Name", "4.Set Invoice Header (Tel / Fax / Email )", "5.Go Back");
+		List<String> shopMenu = Arrays.asList(  "1.Load Data Items ",
+				"2.Set Shop Name", "3.Set Invoice Header (Tel / Fax / Email )", "4.Go Back");
 
 		List<String> itemMenu = Arrays.asList("createItemsTable", "1.insertIntoItemsTable", "2.Delete Items",
 				"3.Change Item Price", "4.Report All Items ", "5.Go Back");

@@ -65,12 +65,8 @@ public class Shop {
 		 String createTableQuery = "CREATE TABLE shop (" 
 		      + "name varchar(50) ," 
 		      + "telephone VARCHAR(255) NOT NULL,"
-		      + "fax VARCHAR(255)," 
-		      + "email varchar(50) NOT NULL," 
-		      + "website varchar(50)" 
+		      + "email varchar(50) NOT NULL,"   
 		      + ")";
-		 // Execute the query to create the table
-		 ResultSet resultSet = statement.executeQuery(createTableQuery);
 		 // Close the database connection
 		 connection.close();
 		 } catch (Exception exception) {
@@ -91,26 +87,26 @@ public class Shop {
 		 Statement statement = connection.createStatement();
 		 // Create a new shop object and set its properties based on user input
 		 Shop shop = new Shop();
-		 System.out.print("Enter shop name: ");
+		 System.out.println("Enter shop name: ");
 		 String shopName = scanner.nextLine();
 		 shop.setShopName(shopName);
-		 System.out.print("Enter telephone number: ");
+		 System.out.println("Enter telephone number: ");
 		 int telephone = scanner.nextInt();
 		 shop.setTelephone(telephone);
-		 System.out.print("Enter fax number: ");
-		 String fax = scanner.nextLine();
-		 shop.setFax(fax);
-		 System.out.print("Enter email address: ");
-		 String email = scanner.nextLine();
+		// System.out.println("Enter fax number: ");
+		// String fax = scanner.nextLine();
+		// shop.setFax(fax);
+		 System.out.println("Enter email address: ");
+		 String email = scanner.next();
 		 shop.setEmail(email);
 	
 		 // Construct SQL query to insert the shop data into the shop table
-		 String insertQuery = "INSERT INTO shop (name, telephone, fax, email, website) VALUES ('" 
-		      + shopName + "', '" + telephone + "', '" + fax + "', '" + email + "')";
+		 String insertQuery = "INSERT INTO shop (name, telephone, email) VALUES ('" 
+		      + shopName + "', '" + telephone + "', '" + email + "')";
 		 // Execute the query to insert the data
 		 int rowsAffected = statement.executeUpdate(insertQuery);
 		 if (rowsAffected >= 1) {
-		 System.out.println("Data inserted successfully: " + insertQuery);
+		 System.out.println("Data inserted successfully: ");
 		 } else {
 		 System.out.println("Data insertion failed");
 		 }
